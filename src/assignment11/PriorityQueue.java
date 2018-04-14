@@ -53,6 +53,10 @@ public class PriorityQueue<AnyType> {
 	public int size() {
 		return currentSize;
 	}
+	
+	public HashMap<AnyType, Integer> map() {
+		return map;
+	}
 
 	/**
 	 * Makes this priority queue empty.
@@ -92,8 +96,10 @@ public class PriorityQueue<AnyType> {
 		}
 		// store the minimum item so that it may be returned at the end
 		AnyType min = array[1];
+		map.remove(min);
 		// replace the item at minIndex with the last item in the tree
 		array[1] = array[currentSize];
+		map.put(array[1], 1);
 		array[currentSize] = null;
 		// update size
 		currentSize--;
@@ -240,27 +246,6 @@ public class PriorityQueue<AnyType> {
 		return;
 	}
 	
-	/*
-	 * while (getLeftChild(curPos) != null && getRightChild(curPos) != null &&
-	 * (compare(array[curPos], getLeftChild(curPos)) > 0 || compare(array[curPos],
-	 * getRightChild(curPos)) > 0) && curPos < currentSize) { if
-	 * (compare(getLeftChild(curPos), getRightChild(curPos)) > 0) { swap((curPos *
-	 * 2) + 1); curPos = (curPos * 2) + 1; } else if (compare(getLeftChild(curPos),
-	 * getRightChild(curPos)) <= 0) { swap(curPos * 2); curPos *= 2; } }
-	 */
-
-	/*
-	 * // When both children do not equal null int leftChild =
-	 * compare(array[curPos], getLeftChild(curPos)); int rightChild =
-	 * compare(array[curPos], getRightChild(curPos)); if (leftChild > 0 &&
-	 * rightChild > 0) { if (compare(getLeftChild(curPos), getRightChild(curPos)) >
-	 * 0) { swap((curPos * 2) + 1); curPos = (curPos * 2) + 1; } else if
-	 * (compare(getLeftChild(curPos), getRightChild(curPos)) <= 0) { swap(curPos *
-	 * 2); curPos *= 2; } } else if (leftChild > 0) { swap(curPos * 2); curPos *= 2;
-	 * } else if (rightChild > 0) { swap((curPos * 2) + 1); curPos = (curPos * 2) +
-	 * 1; }
-	 */
-
 	/**
 	 * Resizes the priority queue
 	 */

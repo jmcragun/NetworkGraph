@@ -47,8 +47,12 @@ public class Airport {
 		return city;
 	}
 
-	public Airport comeFrom() {
+	public Airport cameFrom() {
 		return cameFrom;
+	}
+	
+	public void cameFrom(Airport airport) {
+		cameFrom = airport;
 	}
 
 	public HashMap<Airport, double[]> destinations() {
@@ -99,10 +103,6 @@ public class Airport {
 			values[3] = values[3] + ((canceled - values[3]) / values[5]);
 			values[4] = values[4] + ((time - values[4]) / values[5]);
 		}
-	}
-	
-	public void setCameFrom(Airport airport) {
-		cameFrom = airport;
 	}
 	
 	public void switchVistited() {
