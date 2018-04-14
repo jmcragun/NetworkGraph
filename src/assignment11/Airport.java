@@ -23,7 +23,7 @@ public class Airport {
 
 	/** Denotes the previous airport on the optimal */
 	private Airport cameFrom;
-	
+
 	private boolean visited;
 
 	public Airport(String city) {
@@ -58,7 +58,7 @@ public class Airport {
 	public double cost() {
 		return cost;
 	}
-	
+
 	public boolean isVisited() {
 		return visited;
 	}
@@ -85,8 +85,27 @@ public class Airport {
 	 * @param airport
 	 * @param localCost
 	 */
-	public void addDestination(Airport airport, double[] localCosts) {
-			links.put(airport, localCosts);
+	public void addDestination(Airport airport, double price, double delay, double distance, double canceled,
+			double time) {
+		if (!links.containsKey(airport)) {
+			double[] values = new double[] { price, delay, distance, canceled, time, 1 };
+			links.put(airport, values);
+		} else {
+			double [] values = links.get(airport);
+			values[5] = values[5] + 1;
+			values[0] = values[0] + ((price - values[0]) / values[5]);
+			values[1] = values[1] + ((delay - values[1]) / values[5]);
+			values[2] = values[2] + ((distance - values[2]) / values[5]);
+			values[3] = values[3] + ((canceled - values[3]) / values[5]);
+			values[4] = values[4] + ((time - values[4]) / values[5]);
+		}
 	}
-
+	
+	public void setCameFrom(Airport airport) {
+		cameFrom = airport;
+	}
+	
+	public void switchVistited() {
+		visited ^= true;
+	}
 }
