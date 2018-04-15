@@ -15,8 +15,8 @@ public class Airport {
 	 */
 	private double cost;
 
-	/** A hash map with the local costs of each linked airport */
-	private HashMap<Airport, double[]> links;
+	private HashMap<String, Destination> destinations;
+	
 
 	/** Denotes the city of the airport */
 	private String city;
@@ -31,7 +31,7 @@ public class Airport {
 		this.city = city;
 		cameFrom = null;
 		visited = false;
-		links = new HashMap<>();
+		destinations = new HashMap<>();
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public class Airport {
 		cameFrom = airport;
 	}
 
-	public HashMap<Airport, double[]> destinations() {
-		return links;
+	public HashMap<String, Destination> destinations() {
+		return destinations;
 	}
 
 	public double cost() {
@@ -66,9 +66,21 @@ public class Airport {
 	public boolean isVisited() {
 		return visited;
 	}
-
-	public double[] getDestinationCost(Airport airport) {
-		return links.get(airport);
+	
+	/**
+	 * Gets the immediate cost from a given airport
+	 * @param fc
+	 * @param destination
+	 * @return
+	 */
+	public double getLocalCost(FlightCriteria fc, String destination) {
+		// Get all destinations with the destination city, average the specified criteria, and return it
+		return 0;
+	}
+	
+public double getLocalCost(FlightCriteria fc, String destination, String carrier) {
+		// Get all destinations with the destination and carrier, average the specified criteria, and return it
+		return 0;
 	}
 
 	/**
@@ -89,21 +101,15 @@ public class Airport {
 	 * @param airport
 	 * @param localCost
 	 */
-	public void addDestination(Airport airport, double price, double delay, double distance, double canceled,
-			double time) {
-		if (!links.containsKey(airport)) {
-			double[] values = new double[] { price, delay, distance, canceled, time, 1 };
-			links.put(airport, values);
+	public void addDestination(Destination destination) {
+		if (!destinations.containsKey(destination.destination() + destination.carrier())) {
+			destinations.put(destination.destination() + destination.carrier(), destination);
 		} else {
-			double [] values = links.get(airport);
-			values[5] = values[5] + 1;
-			values[0] = values[0] + ((price - values[0]) / values[5]);
-			values[1] = values[1] + ((delay - values[1]) / values[5]);
-			values[2] = values[2] + ((distance - values[2]) / values[5]);
-			values[3] = values[3] + ((canceled - values[3]) / values[5]);
-			values[4] = values[4] + ((time - values[4]) / values[5]);
-			links.put(airport, values);
+			Destination d = destinations.get(destination.destination() + destination.carrier());
+			d.update(destination);
+			destinations.put(destination.destination() + destination.carrier(), d);
 		}
+		
 	}
 	
 	public void switchVistited() {
