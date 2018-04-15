@@ -67,16 +67,17 @@ public class NetworkGraph {
 				if (!network.containsKey(data[0])) {
 					Airport airport = new Airport(data[0]);
 					// ADD DESTINATION
-					airport.addDestination(data[1], Double.parseDouble(data[2]),
+					airport.addDestination(new Airport(data[1]), Double.parseDouble(data[2]),
 							Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]),
 							Double.parseDouble(data[6]));
 					network.put(data[0], airport);
 				} else {
 					// ADD  DESTINATION
 					Airport airport = network.get(data[0]);
-					airport.addDestination(data[1], Double.parseDouble(data[2]),
+					airport.addDestination(new Airport(data[1]), Double.parseDouble(data[2]),
 							Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]),
 							Double.parseDouble(data[6]));
+					network.put(data[0], airport);
 				}
 			}
 		}

@@ -16,7 +16,7 @@ public class Airport {
 	private double cost;
 
 	/** A hash map with the local costs of each linked airport */
-	private HashMap<String, double[]> links;
+	private HashMap<Airport, double[]> links;
 
 	/** Denotes the city of the airport */
 	private String city;
@@ -55,7 +55,7 @@ public class Airport {
 		cameFrom = airport;
 	}
 
-	public HashMap<String, double[]> destinations() {
+	public HashMap<Airport, double[]> destinations() {
 		return links;
 	}
 
@@ -89,7 +89,7 @@ public class Airport {
 	 * @param airport
 	 * @param localCost
 	 */
-	public void addDestination(String airport, double price, double delay, double distance, double canceled,
+	public void addDestination(Airport airport, double price, double delay, double distance, double canceled,
 			double time) {
 		if (!links.containsKey(airport)) {
 			double[] values = new double[] { price, delay, distance, canceled, time, 1 };
@@ -102,10 +102,16 @@ public class Airport {
 			values[2] = values[2] + ((distance - values[2]) / values[5]);
 			values[3] = values[3] + ((canceled - values[3]) / values[5]);
 			values[4] = values[4] + ((time - values[4]) / values[5]);
+			links.put(airport, values);
 		}
 	}
 	
 	public void switchVistited() {
 		visited ^= true;
+	}
+	
+	@Override
+	public int hashCode() {
+		return city.hashCode();
 	}
 }
