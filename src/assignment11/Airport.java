@@ -67,7 +67,7 @@ public class Airport {
 		return visited;
 	}
 
-	public double[] getDestinationCost(String airport) {
+	public double[] getDestinationCost(Airport airport) {
 		return links.get(airport);
 	}
 
