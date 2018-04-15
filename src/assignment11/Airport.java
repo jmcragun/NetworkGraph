@@ -27,7 +27,6 @@ public class Airport {
 	private boolean visited;
 
 	public Airport(String city) {
-		String hello;
 		cost = Integer.MAX_VALUE;
 		this.city = city;
 		cameFrom = null;
