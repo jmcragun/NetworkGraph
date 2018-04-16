@@ -75,12 +75,12 @@ public class Airport {
 	 */
 	public double getLocalCost(FlightCriteria fc, String destination) {
 		// Get all destinations with the destination city, average the specified criteria, and return it
-		return 0;
+		return destinations.get(destination).getValue(fc);
 	}
 	
-public double getLocalCost(FlightCriteria fc, String destination, String carrier) {
+	public double getLocalCost(FlightCriteria fc, String destination, String carrier) {
 		// Get all destinations with the destination and carrier, average the specified criteria, and return it
-		return 0;
+		return destinations.get(destination).getValue(fc, carrier);
 	}
 
 	/**
@@ -101,15 +101,16 @@ public double getLocalCost(FlightCriteria fc, String destination, String carrier
 	 * @param airport
 	 * @param localCost
 	 */
-	public void addDestination(Destination destination) {
-		if (!destinations.containsKey(destination.destination() + destination.carrier())) {
-			destinations.put(destination.destination() + destination.carrier(), destination);
+	public void addDestination(String city, String carrier, double price, double delay, double distance, double canceled, double time) {
+		if (!destinations.containsKey(city)) {
+			Destination newDestination = new Destination(city);
+			newDestination.addData(carrier, price, delay, distance, canceled, time);
+			destinations.put(city, newDestination);
 		} else {
-			Destination d = destinations.get(destination.destination() + destination.carrier());
-			d.update(destination);
-			destinations.put(destination.destination() + destination.carrier(), d);
+			Destination destination = destinations.get(city);
+			destination.addData(carrier, price, delay, distance, canceled, time);
+			destinations.put(city, destination);
 		}
-		
 	}
 	
 	public void switchVistited() {
