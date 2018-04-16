@@ -133,21 +133,24 @@ public class NetworkGraph {
 			while(!priorityQueue.isEmpty()) {
 				currentPort = priorityQueue.deleteMin();
 				if(currentPort.equals(finishPort)) {
-					return bestPath;
+					for(Airport endPath = currentPort; endPath != null; endPath = endPath.cameFrom()) {
+						bestPath.addAirport(endPath);
+					}
+					break;
 				}
 				for(Destination flight: currentPort.destinations().values()) {
-					if(network.containsKey(flight)) {
+					if(network.containsKey(flight.destinationCity())) {
 						Airport dest = network.get(flight.destinationCity());
 						if(!dest.isVisited()) {
 							if(dest.cost() > currentPort.cost() + flight.getValue(criteria)) {
-								priorityQueue.d
+								dest.cameFrom(currentPort);
+								dest.setCost(currentPort.cost() + currentPort.getLocalCost(criteria, dest.city()));
+								priorityQueue.add(dest);
 							}
 						}
 					}
 				}
 			}
-			currentPort.switchVistited();
-			
 		case DELAY:
 		case DISTANCE:
 		case CANCELED:

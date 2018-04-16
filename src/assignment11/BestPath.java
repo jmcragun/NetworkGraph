@@ -39,6 +39,10 @@ public class BestPath {
 	public double getPathCost() {
 		return pathCost;
 	}
+	
+	public void addAirport(Airport airport) {
+		path.add(airport.city());
+	}
 
 	@Override
 	public boolean equals(Object o) {
