@@ -294,4 +294,8 @@ public class PriorityQueue<AnyType> {
 		}
 		return null;
 	}
+	
+	protected boolean isEmpty() {
+		return this.currentSize == 0;
+	}
 }

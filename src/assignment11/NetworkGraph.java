@@ -4,6 +4,7 @@
 package assignment11;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -32,14 +33,19 @@ import java.util.Scanner;
  */
 public class NetworkGraph {
 
-	/** The source input stream */
 	InputStream IS;
 
-	/** Indicates which criteria is being searched */
-	private int criteria;
-
-	/** The graph of the airports */
 	HashMap<String, Airport> network;
+	
+	public static void main(String[] args) {
+		HashMap<Airport, String> map = new HashMap<>();
+		Airport airport = new Airport("SLC");
+		airport.addDestination("DMV", 5, 5, 5, 5, 5);
+		map.put(airport, "hello world");
+		Airport airportb = new Airport("SLC");
+		System.out.println(map.containsKey(airportb));
+		System.out.println(airportb.equals(airport));
+	}
 
 	/**
 	 * <p>
@@ -64,33 +70,23 @@ public class NetworkGraph {
 	 */
 	public NetworkGraph(InputStream flightInfo) {
 		// TODO: Implement a constructor that reads in the file and stores the
-		// TODO: Find a way to save this inputstream after reading through it
-		IS = flightInfo;
-		HashMap<String, Airport> network = new HashMap<>();
-		try (Scanner info = new Scanner(IS)) {
-			while (info.hasNextLine()) {
-				String line = info.nextLine();
-				// This should yield an array of size 8
-				// Origin, Dest, Carrier, Price, Delay, Distance, Cancelled, Time
-				String[] data = line.split(",");
-				if (!network.containsKey(data[0])) {
-					Airport airport = new Airport(data[0]);
-					// ADD DESTINATION
-					// The doubles start at the third index because we skip over the carrier for now
-					// TODO: Possibly tweak this so that it has the same references in both the
-					// network and the desinations of a given airport
-					airport.addDestination(new Airport(data[1]), Double.parseDouble(data[3]),
-							Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]),
-							Double.parseDouble(data[7]));
-					network.put(data[0], airport);
-				} else {
-					// ADD DESTINATION
-					Airport airport = network.get(data[0]);
-					airport.addDestination(new Airport(data[1]), Double.parseDouble(data[3]),
-							Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]),
-							Double.parseDouble(data[7]));
-					network.put(data[0], airport);
-				}
+		// information
+		// appropriately in this object.
+		Scanner info = new Scanner(flightInfo);
+		while (info.hasNextLine()) {
+			String line = info.nextLine();
+			String[] data = line.split(",");
+			if (!network.containsKey(data[0])) {
+				Airport airport = new Airport(data[0]);
+				// ADD DESTINATION
+				airport.addDestination(data[1], Double.parseDouble(data[2]), Double.parseDouble(data[3]),
+						Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
+				network.put(data[0], airport);
+			} else {
+				// ADD ADDITIONAL DESTINATION
+				Airport airport = network.get(data[0]);
+				airport.addDestination(data[1], Double.parseDouble(data[2]), Double.parseDouble(data[3]),
+						Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
 			}
 		}
 	}
@@ -126,6 +122,47 @@ public class NetworkGraph {
 		// TODO: First figure out what kind of path you need to get (HINT: Use a
 		// switch!) then
 		// Search for the shortest path using Dijkstra's algorithm.
+		ArrayList<String> path = new ArrayList<String>();
+		double pathCost = 0;
+		
+		BestPath bestPath = new BestPath(path, pathCost);
+		
+		PriorityQueue<Airport> priorityQueue = new PriorityQueue<Airport>();
+		
+		Airport startPort = new Airport(origin);
+		Airport finishPort = new Airport(destination);
+		Airport currentPort;
+		
+		startPort.setCost(0);
+		startPort.cameFrom(null);
+		
+		priorityQueue.add(startPort);
+		
+		switch(criteria){
+		case PRICE:
+			while(!priorityQueue.isEmpty()) {
+				currentPort = priorityQueue.deleteMin();
+				if(currentPort.equals(finishPort)) {
+					return bestPath;
+				}
+				for(Destination flight: currentPort.destinations().values()) {
+					if(network.containsKey(flight)) {
+						Airport dest = network.get(flight.destinationCity());
+						if(!dest.isVisited()) {
+							if(dest.cost() > currentPort.cost() + flight.getValue(criteria)) {
+								priorityQueue.d
+							}
+						}
+					}
+				}
+			}
+			currentPort.switchVistited();
+			
+		case DELAY:
+		case DISTANCE:
+		case CANCELED:
+		case TIME:
+		}
 		return null;
 	}
 
@@ -162,5 +199,5 @@ public class NetworkGraph {
 		return null;
 	}
 
-	//
+	// helper dijkstra's
 }
