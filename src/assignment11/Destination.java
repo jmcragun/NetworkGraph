@@ -2,6 +2,12 @@ package assignment11;
 
 import java.util.HashMap;
 
+/**
+ * 
+ * @author Joshua Cragun & Steven Pasinsky
+ *
+ */
+
 public class Destination {
 	/** The city the flight is going to */
 	private String destination;
@@ -29,6 +35,15 @@ public class Destination {
 		return destination;
 	}
 	
+	/**
+	 * Adds data to the destination and computes a rolling average with it and the previous data, both overall and for the specific carrier
+	 * @param carrier
+	 * @param price
+	 * @param delay
+	 * @param distance
+	 * @param canceled
+	 * @param time
+	 */
 	public void addData(String carrier, double price, double delay, double distance, double canceled, double time) {
 		// First update overall local costs
 		++superIter;
@@ -55,7 +70,7 @@ public class Destination {
 	}
 	
 	/**
-	 * Fetches the overall value of a specified type
+	 * Fetches the overall local cost value of a specified type
 	 * @param fc
 	 * @return
 	 */
@@ -75,6 +90,12 @@ public class Destination {
 		return -1;
 	}
 	
+	/**
+	 * Fetches the local cost value of a specified type and carrier
+	 * @param fc
+	 * @param carrier
+	 * @return
+	 */
 	public double getValue(FlightCriteria fc, String carrier) {
 		double[] values = carriers.get(carrier);
 		if (values == null) {

@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 /**
  * Represents a priority queue of generically-typed items. The queue is
  * implemented as a min heap. The min heap is implemented implicitly as an
- * array.
+ * array. This implementation is specifically designed for assignment 11, and as
+ * such has a few key differences from a traditional priority queue
  * 
  * @author Joshua Cragun
  */
@@ -19,7 +20,7 @@ public class PriorityQueue<AnyType> {
 	private AnyType[] array;
 
 	private Comparator<? super AnyType> cmp;
-	
+
 	private HashMap<AnyType, Integer> map;
 
 	/**
@@ -53,7 +54,7 @@ public class PriorityQueue<AnyType> {
 	public int size() {
 		return currentSize;
 	}
-	
+
 	public HashMap<AnyType, Integer> map() {
 		return map;
 	}
@@ -120,14 +121,37 @@ public class PriorityQueue<AnyType> {
 	public void add(AnyType item) {
 		if (item == null) {
 			return;
+		} else if (map.containsKey(item)) {
+			// Consider the case where something has already been added to the PQ. Check to
+			// see if the priority has changed.
+			int index = map.get(item);
+			if (compare(item, array[index / 2]) < 0) {
+				swap(index);
+			} else if ((array[index * 2] != null && compare(item, array[index * 2]) > 0)
+					|| (array[(index * 2) + 1] != null && compare(item, array[(index * 2) + 1]) > 0)) {
+				// If any of the children are less than the item, then the item must be sifted
+				// down
+				// Swap with the smallest child
+				if (compare(getLeftChild(index), getRightChild(index)) > 0) {
+					swap((index * 2) + 1);
+					// Add it again until changes are no longer necessary
+					add(item);
+				} else if (compare(getLeftChild(index), getRightChild(index)) <= 0) {
+					swap(index * 2);
+					// Add it again until changes are no longer necessary
+					add(item);
+				}
+			}
+			return;
+		} else {
+			currentSize++;
+			if (currentSize >= array.length) {
+				resize();
+			}
+			array[currentSize] = item;
+			map.put(item, currentSize);
+			percolateUp();
 		}
-		currentSize++;
-		if (currentSize >= array.length) {
-			resize();
-		}
-		array[currentSize] = item;
-		map.put(item, currentSize);
-		percolateUp();
 	}
 
 	/**
@@ -245,7 +269,7 @@ public class PriorityQueue<AnyType> {
 		}
 		return;
 	}
-	
+
 	/**
 	 * Resizes the priority queue
 	 */
@@ -294,7 +318,7 @@ public class PriorityQueue<AnyType> {
 		}
 		return null;
 	}
-	
+
 	protected boolean isEmpty() {
 		return this.currentSize == 0;
 	}
