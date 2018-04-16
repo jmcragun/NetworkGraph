@@ -36,16 +36,6 @@ public class NetworkGraph {
 	InputStream IS;
 
 	HashMap<String, Airport> network;
-	
-	public static void main(String[] args) {
-		HashMap<Airport, String> map = new HashMap<>();
-		Airport airport = new Airport("SLC");
-		airport.addDestination("DMV", 5, 5, 5, 5, 5);
-		map.put(airport, "hello world");
-		Airport airportb = new Airport("SLC");
-		System.out.println(map.containsKey(airportb));
-		System.out.println(airportb.equals(airport));
-	}
 
 	/**
 	 * <p>
@@ -69,24 +59,24 @@ public class NetworkGraph {
 	 * 
 	 */
 	public NetworkGraph(InputStream flightInfo) {
-		// TODO: Implement a constructor that reads in the file and stores the
-		// information
-		// appropriately in this object.
-		Scanner info = new Scanner(flightInfo);
-		while (info.hasNextLine()) {
-			String line = info.nextLine();
-			String[] data = line.split(",");
-			if (!network.containsKey(data[0])) {
-				Airport airport = new Airport(data[0]);
-				// ADD DESTINATION
-				airport.addDestination(data[1], Double.parseDouble(data[2]), Double.parseDouble(data[3]),
-						Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
-				network.put(data[0], airport);
-			} else {
-				// ADD ADDITIONAL DESTINATION
-				Airport airport = network.get(data[0]);
-				airport.addDestination(data[1], Double.parseDouble(data[2]), Double.parseDouble(data[3]),
-						Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
+		try (Scanner info = new Scanner(flightInfo)) {
+			while (info.hasNextLine()) {
+				String line = info.nextLine();
+				String[] data = line.split(",");
+				if (!network.containsKey(data[0])) {
+					Airport airport = new Airport(data[0]);
+					// ADD DESTINATION
+					// The array should be of size 8
+					airport.addDestination(data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]),
+							Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]));
+					network.put(data[0], airport);
+				} else {
+					// ADD ADDITIONAL DESTINATION
+					Airport airport = network.get(data[0]);
+					airport.addDestination(data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]),
+							Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]));
+					network.put(data[0], airport);
+				}
 			}
 		}
 	}
