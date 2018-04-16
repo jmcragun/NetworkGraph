@@ -126,6 +126,7 @@ public class PriorityQueue<AnyType> {
 			// see if the priority has changed.
 			int index = map.get(item);
 			if (compare(item, array[index / 2]) < 0) {
+				// If the item is now less than it's parent, it needs to be moved up the PQ
 				swap(index);
 			} else if ((array[index * 2] != null && compare(item, array[index * 2]) > 0)
 					|| (array[(index * 2) + 1] != null && compare(item, array[(index * 2) + 1]) > 0)) {
