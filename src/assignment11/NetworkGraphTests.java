@@ -28,4 +28,17 @@ public class NetworkGraphTests {
 		}
 
 	}
+	
+	@SuppressWarnings("unused")
+	@Test
+	public void testConstructorBigData() {
+		File data = new File("flights-2017-q3.csv");
+		NetworkGraph ng = null;
+		try {
+			InputStream dataStream = new FileInputStream(data);
+			ng = new NetworkGraph(dataStream);
+		} catch (FileNotFoundException e) {
+			System.out.println("The File was not found.");
+		}
+	}
 }
