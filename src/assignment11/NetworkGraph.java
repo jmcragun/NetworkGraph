@@ -6,6 +6,7 @@ package assignment11;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -61,6 +62,11 @@ public class NetworkGraph {
 	public NetworkGraph(InputStream flightInfo) {
 		network = new HashMap<>();
 		try (Scanner info = new Scanner(flightInfo)) {
+			try {
+				info.nextLine();
+			} catch (NoSuchElementException e) {
+				return;
+			}
 			while (info.hasNextLine()) {
 				String line = info.nextLine();
 				String[] data = line.split(",");
@@ -182,10 +188,48 @@ public class NetworkGraph {
 	 *         destination, and everything in between.
 	 */
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria, String airliner) {
-		// TODO:
-		// Re read through the CSV, ignore all entries that are not with the specified
-		// carrier
-		return null;
+		BestPath bestPath = new BestPath(new ArrayList<String>(), 0);
+
+		PriorityQueue<Airport> priorityQueue = new PriorityQueue<Airport>(new AirportComparator());
+
+		// First check to see if the wanted airports were read.
+		if (!network.containsKey(origin) || !network.containsKey(destination)) {
+			return new BestPath(new ArrayList<String>(), 0);
+		}
+
+		Airport startPort = network.get(origin);
+		Airport finishPort = network.get(destination);
+
+		Airport currentPort;
+
+		startPort.setCost(0);
+
+		priorityQueue.add(startPort);
+
+		while (!priorityQueue.isEmpty()) {
+			currentPort = priorityQueue.deleteMin();
+			currentPort.visit();
+			if (currentPort.equals(finishPort)) {
+				bestPath.setPathCost(currentPort.cost());
+				for (Airport endPath = currentPort; endPath != null; endPath = endPath.cameFrom()) {
+					bestPath.addAirport(endPath);
+				}
+				break;
+			}
+			for (Destination flight : currentPort.destinations().values()) {
+				if (network.containsKey(flight.destinationCity())) {
+					Airport dest = network.get(flight.destinationCity());
+					if (!dest.isVisited()) {
+						if (dest.cost() > currentPort.cost() + flight.getValue(criteria, airliner)) {
+							dest.cameFrom(currentPort);
+							dest.setCost(currentPort.cost() + currentPort.getLocalCost(criteria, dest.city(), airliner));
+							priorityQueue.add(dest);
+						}
+					}
+				}
+			}
+		}
+		return bestPath;
 	}
 
 	// helper dijkstra's
