@@ -20,7 +20,7 @@ public class NetworkGraphTests {
 			System.out.println("The File was not found.");
 		}
 		if (ng != null) {
-			BestPath bp = ng.getBestPath("SFO", "JFK", FlightCriteria.DISTANCE);
+			BestPath bp = ng.getBestPath("SFO", "JFK", FlightCriteria.PRICE);
 			System.out.println(bp.getPathCost());
 			System.out.println(bp.getPath());
 		} else {

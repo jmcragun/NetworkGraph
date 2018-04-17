@@ -144,15 +144,15 @@ public class Airport {
 	 * @param airport
 	 * @param localCost
 	 */
-	public void addDestination(String city, String carrier, double price, double delay, double distance,
-			double canceled, double time) {
+	public void addDestination(String city, String carrier, double delay, double canceled, double time,
+			double distance, double price) {
 		if (!destinations.containsKey(city)) {
 			Destination newDestination = new Destination(city);
-			newDestination.addData(carrier, price, delay, distance, canceled, time);
+			newDestination.addData(carrier, delay, canceled, time, distance, price);
 			destinations.put(city, newDestination);
 		} else {
 			Destination destination = destinations.get(city);
-			destination.addData(carrier, price, delay, distance, canceled, time);
+			destination.addData(carrier, delay, canceled, time, distance, price);
 			destinations.put(city, destination);
 		}
 	}

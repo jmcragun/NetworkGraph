@@ -110,9 +110,6 @@ public class NetworkGraph {
 	 *         destination, and everything in between.
 	 */
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria) {
-		// TODO: First figure out what kind of path you need to get (HINT: Use a
-		// switch!) then
-		// Search for the shortest path using Dijkstra's algorithm.
 
 		BestPath bestPath = new BestPath(new ArrayList<String>(), 0);
 
