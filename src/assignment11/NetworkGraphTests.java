@@ -20,7 +20,9 @@ public class NetworkGraphTests {
 			System.out.println("The File was not found.");
 		}
 		if (ng != null) {
-			//ng.getBestPath("SFO", "JFK", FlightCriteria.PRICE);
+			BestPath bp = ng.getBestPath("SFO", "JFK", FlightCriteria.DISTANCE);
+			System.out.println(bp.getPathCost());
+			System.out.println(bp.getPath());
 		} else {
 			System.out.println("There was a problem initializing the Network Graph");
 		}

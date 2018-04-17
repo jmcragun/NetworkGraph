@@ -2,38 +2,18 @@ package assignment11;
 
 import java.util.Comparator;
 
-public class AirportComparator implements Comparator<Airport>{
+public class AirportComparator implements Comparator<Airport> {
 
-	private FlightCriteria fc;
-	
-	private String carrier;
-	
-	public AirportComparator(FlightCriteria flc) {
-		fc = flc;
-		carrier = null;
-	}
-	
-	public AirportComparator(FlightCriteria flc, String company) {
-		fc = flc;
-		carrier = company;
-	}
-	
 	@Override
 	public int compare(Airport arg0, Airport arg1) {
-		if (carrier == null) {
-			
+		double cost = arg0.cost() - arg1.cost();
+		if (Math.abs(cost) < 0.000001) {
+			return 0;
+		} else if (cost < 0) {
+			return -1;
 		} else {
-			
+			return 1;
 		}
-		return 0;
-	}
-	
-	public void setCarrier(String arg) {
-		carrier = arg;
-	}
-	
-	public void setCriteria(FlightCriteria arg) {
-		fc = arg;
 	}
 
 }

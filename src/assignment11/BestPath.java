@@ -41,7 +41,11 @@ public class BestPath {
 	}
 	
 	public void addAirport(Airport airport) {
-		path.add(airport.city());
+		path.add(0, airport.city());
+	}
+	
+	public void setPathCost(double cost) {
+		pathCost = cost;
 	}
 
 	@Override

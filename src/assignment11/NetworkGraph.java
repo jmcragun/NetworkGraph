@@ -113,57 +113,49 @@ public class NetworkGraph {
 		// TODO: First figure out what kind of path you need to get (HINT: Use a
 		// switch!) then
 		// Search for the shortest path using Dijkstra's algorithm.
-		ArrayList<String> path = new ArrayList<String>();
-		double pathCost = 0;
-		
-		BestPath bestPath = new BestPath(path, pathCost);
-		
-		PriorityQueue<Airport> priorityQueue = new PriorityQueue<Airport>();
-		
-		//First check to see if the wanted airports were read.
+
+		BestPath bestPath = new BestPath(new ArrayList<String>(), 0);
+
+		PriorityQueue<Airport> priorityQueue = new PriorityQueue<Airport>(new AirportComparator());
+
+		// First check to see if the wanted airports were read.
 		if (!network.containsKey(origin) || !network.containsKey(destination)) {
 			return new BestPath(new ArrayList<String>(), 0);
 		}
-		
+
 		Airport startPort = network.get(origin);
 		Airport finishPort = network.get(destination);
-		
+
 		Airport currentPort;
-		
+
 		startPort.setCost(0);
-		
+
 		priorityQueue.add(startPort);
-		
-		switch(criteria){
-		case PRICE:
-			while(!priorityQueue.isEmpty()) {
-				currentPort = priorityQueue.deleteMin();
-				currentPort.visit();
-				if(currentPort.equals(finishPort)) {
-					for(Airport endPath = currentPort; endPath != null; endPath = endPath.cameFrom()) {
-						bestPath.addAirport(endPath);
-					}
-					break;
+
+		while (!priorityQueue.isEmpty()) {
+			currentPort = priorityQueue.deleteMin();
+			currentPort.visit();
+			if (currentPort.equals(finishPort)) {
+				bestPath.setPathCost(currentPort.cost());
+				for (Airport endPath = currentPort; endPath != null; endPath = endPath.cameFrom()) {
+					bestPath.addAirport(endPath);
 				}
-				for(Destination flight: currentPort.destinations().values()) {
-					if(network.containsKey(flight.destinationCity())) {
-						Airport dest = network.get(flight.destinationCity());
-						if(!dest.isVisited()) {
-							if(dest.cost() > currentPort.cost() + flight.getValue(criteria)) {
-								dest.cameFrom(currentPort);
-								dest.setCost(currentPort.cost() + currentPort.getLocalCost(criteria, dest.city()));
-								priorityQueue.add(dest);
-							}
+				break;
+			}
+			for (Destination flight : currentPort.destinations().values()) {
+				if (network.containsKey(flight.destinationCity())) {
+					Airport dest = network.get(flight.destinationCity());
+					if (!dest.isVisited()) {
+						if (dest.cost() > currentPort.cost() + flight.getValue(criteria)) {
+							dest.cameFrom(currentPort);
+							dest.setCost(currentPort.cost() + currentPort.getLocalCost(criteria, dest.city()));
+							priorityQueue.add(dest);
 						}
 					}
 				}
 			}
-		case DELAY:
-		case DISTANCE:
-		case CANCELED:
-		case TIME:
 		}
-		return null;
+		return bestPath;
 	}
 
 	/**
