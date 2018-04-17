@@ -16,7 +16,6 @@ public class Airport {
 	private double cost;
 
 	private HashMap<String, Destination> destinations;
-	
 
 	/** Denotes the city of the airport */
 	private String city;
@@ -26,6 +25,10 @@ public class Airport {
 
 	private boolean visited;
 
+	/**
+	 * Constructor
+	 * @param city
+	 */
 	public Airport(String city) {
 		cost = Integer.MAX_VALUE;
 		this.city = city;
@@ -43,43 +46,83 @@ public class Airport {
 		return false;
 	}
 
+
+	@Override
+	public int hashCode() {
+		return city.hashCode();
+	}
+	
+	/**
+	 * Returns the city label of the airport. There should only be one airport for a
+	 * given city.
+	 * 
+	 * @return
+	 */
 	public String city() {
 		return city;
 	}
 
+	/**
+	 * Indicates the airport that this one came from on the optimal path.
+	 * 
+	 * @return
+	 */
 	public Airport cameFrom() {
 		return cameFrom;
 	}
-	
+
+	/**
+	 * Sets the optimal airport to come from.
+	 * 
+	 * @param airport
+	 */
 	public void cameFrom(Airport airport) {
 		cameFrom = airport;
 	}
 
+	/**
+	 * Returns a hash map of the city labels (key) and destinations (values).
+	 * 
+	 * @return
+	 */
 	public HashMap<String, Destination> destinations() {
 		return destinations;
 	}
 
+	/**
+	 * Fetches the overall cost from a given starting point. If this has not been
+	 * visited yet, then the cost should be Integer.MAX_VAL.
+	 * 
+	 * @return
+	 */
 	public double cost() {
 		return cost;
 	}
 
+	/**
+	 * Returns whether or not this airport has been visited
+	 * @return
+	 */
 	public boolean isVisited() {
 		return visited;
 	}
-	
+
 	/**
 	 * Gets the immediate cost from a given airport
+	 * 
 	 * @param fc
 	 * @param destination
 	 * @return
 	 */
 	public double getLocalCost(FlightCriteria fc, String destination) {
-		// Get all destinations with the destination city, average the specified criteria, and return it
+		// Get all destinations with the destination city, average the specified
+		// criteria, and return it
 		return destinations.get(destination).getValue(fc);
 	}
-	
+
 	public double getLocalCost(FlightCriteria fc, String destination, String carrier) {
-		// Get all destinations with the destination and carrier, average the specified criteria, and return it
+		// Get all destinations with the destination and carrier, average the specified
+		// criteria, and return it
 		return destinations.get(destination).getValue(fc, carrier);
 	}
 
@@ -101,7 +144,8 @@ public class Airport {
 	 * @param airport
 	 * @param localCost
 	 */
-	public void addDestination(String city, String carrier, double price, double delay, double distance, double canceled, double time) {
+	public void addDestination(String city, String carrier, double price, double delay, double distance,
+			double canceled, double time) {
 		if (!destinations.containsKey(city)) {
 			Destination newDestination = new Destination(city);
 			newDestination.addData(carrier, price, delay, distance, canceled, time);
@@ -112,13 +156,11 @@ public class Airport {
 			destinations.put(city, destination);
 		}
 	}
-	
-	public void switchVistited() {
-		visited ^= true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return city.hashCode();
+
+	/**
+	 * Marks the airport as visited
+	 */
+	public void visit() {
+		visited = true;
 	}
 }

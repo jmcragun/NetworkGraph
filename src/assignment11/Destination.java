@@ -15,7 +15,7 @@ public class Destination {
 	/** Used in calculating the rolling average for the overall local cost */
 	private int superIter;
 	
-	/** Denotes the average cost between all carriers*/
+	/** Denotes the average cost across all carriers*/
 	private double[] overallLocalCosts;
 	
 	/** Stores information about each carrier to this city from the parent airport */
@@ -24,6 +24,7 @@ public class Destination {
 	public Destination(String city) {
 		destination = city;
 		superIter = 0;
+		carriers = new HashMap<>();
 		overallLocalCosts = new double[] {0, 0, 0, 0, 0};
 	}
 	

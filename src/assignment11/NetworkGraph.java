@@ -59,6 +59,7 @@ public class NetworkGraph {
 	 * 
 	 */
 	public NetworkGraph(InputStream flightInfo) {
+		network = new HashMap<>();
 		try (Scanner info = new Scanner(flightInfo)) {
 			while (info.hasNextLine()) {
 				String line = info.nextLine();
@@ -119,12 +120,17 @@ public class NetworkGraph {
 		
 		PriorityQueue<Airport> priorityQueue = new PriorityQueue<Airport>();
 		
-		Airport startPort = new Airport(origin);
-		Airport finishPort = new Airport(destination);
+		//First check to see if the wanted airports were read.
+		if (!network.containsKey(origin) || !network.containsKey(destination)) {
+			return new BestPath(new ArrayList<String>(), 0);
+		}
+		
+		Airport startPort = network.get(origin);
+		Airport finishPort = network.get(destination);
+		
 		Airport currentPort;
 		
 		startPort.setCost(0);
-		startPort.cameFrom(null);
 		
 		priorityQueue.add(startPort);
 		
@@ -132,6 +138,7 @@ public class NetworkGraph {
 		case PRICE:
 			while(!priorityQueue.isEmpty()) {
 				currentPort = priorityQueue.deleteMin();
+				currentPort.visit();
 				if(currentPort.equals(finishPort)) {
 					for(Airport endPath = currentPort; endPath != null; endPath = endPath.cameFrom()) {
 						bestPath.addAirport(endPath);
