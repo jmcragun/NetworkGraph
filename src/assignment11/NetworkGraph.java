@@ -123,7 +123,7 @@ public class NetworkGraph {
 
 		// First check to see if the wanted airports were read.
 		if (!network.containsKey(origin) || !network.containsKey(destination)) {
-			return new BestPath(new ArrayList<String>(), 0);
+			return bestPath;
 		}
 
 		Airport startPort = network.get(origin);
@@ -158,6 +158,7 @@ public class NetworkGraph {
 				}
 			}
 		}
+		resetNetwork();
 		return bestPath;
 	}
 
@@ -194,7 +195,7 @@ public class NetworkGraph {
 
 		// First check to see if the wanted airports were read.
 		if (!network.containsKey(origin) || !network.containsKey(destination)) {
-			return new BestPath(new ArrayList<String>(), 0);
+			return bestPath;
 		}
 
 		Airport startPort = network.get(origin);
@@ -229,8 +230,17 @@ public class NetworkGraph {
 				}
 			}
 		}
+		resetNetwork();
 		return bestPath;
 	}
 
 	// helper dijkstra's
+	
+	private void resetNetwork() {
+		for (Airport airport: network.values()) {
+			airport.setCost(Integer.MAX_VALUE);
+			airport.unvisit();
+			airport.cameFrom(null);
+		}
+	}
 }

@@ -125,11 +125,12 @@ public class PriorityQueue<AnyType> {
 			// Consider the case where something has already been added to the PQ. Check to
 			// see if the priority has changed.
 			int index = map.get(item);
-			if (compare(item, array[index / 2]) < 0) {
+			if ((array[index / 2] != null) && compare(item, array[index / 2]) < 0) {
 				// If the item is now less than it's parent, it needs to be moved up the PQ
 				swap(index);
-			} else if ((array[index * 2] != null && compare(item, array[index * 2]) > 0)
-					|| (array[(index * 2) + 1] != null && compare(item, array[(index * 2) + 1]) > 0)) {
+				add(item);
+			} else if ((index * 2 <= currentSize && compare(item, array[index * 2]) > 0)
+					|| ((index * 2) + 1 <= currentSize && compare(item, array[(index * 2) + 1]) > 0)) {
 				// If any of the children are less than the item, then the item must be sifted
 				// down
 				// Swap with the smallest child

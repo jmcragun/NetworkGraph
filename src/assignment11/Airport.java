@@ -163,4 +163,8 @@ public class Airport {
 	public void visit() {
 		visited = true;
 	}
+	
+	public void unvisit() {
+		visited = false;
+	}
 }

@@ -88,7 +88,7 @@ public class Destination {
 		case TIME:
 			return overallLocalCosts[2];
 		}
-		return -1;
+		return Integer.MAX_VALUE;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class Destination {
 	public double getValue(FlightCriteria fc, String carrier) {
 		double[] values = carriers.get(carrier);
 		if (values == null) {
-			return -1;
+			return Integer.MAX_VALUE;
 		}
 		switch (fc) {
 		case PRICE:
@@ -114,7 +114,7 @@ public class Destination {
 		case TIME:
 			return values[2];
 		}
-		return -1;
+		return Integer.MAX_VALUE;
 	}
 	
 	@Override
