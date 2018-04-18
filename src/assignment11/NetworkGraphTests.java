@@ -54,9 +54,7 @@ public class NetworkGraphTests {
 		}
 		if (ng != null) {
 			BestPath bp = ng.getBestPath("IHN", "GCF", FlightCriteria.PRICE);
-			if(bp.getPathCost() != 1053.08) {
-				System.out.println("Incorrect Flight Cost Resolution");
-			}
+			assertTrue(Math.abs(bp.getPathCost() - 1053.08) < 0.000001);
 			System.out.println(bp.getPathCost());
 			System.out.println(bp.getPath());
 		}
@@ -74,9 +72,25 @@ public class NetworkGraphTests {
 		}
 		if (ng != null) {
 			BestPath bp = ng.getBestPath("IHN", "GCF", FlightCriteria.DELAY);
-			if(bp.getPathCost() != 135) {
-				System.out.println("Incorrect Flight Cost Resolution");
-			}
+			assertTrue(Math.abs(bp.getPathCost() - 135) < 0.000001);
+			System.out.println(bp.getPathCost());
+			System.out.println(bp.getPath());
+		}
+	}
+	
+	@Test
+	public void testPaths2Canceled() {
+		File data = new File("Paths2.csv");
+		NetworkGraph ng = null;
+		try {
+			InputStream dataStream = new FileInputStream(data);
+			ng = new NetworkGraph(dataStream);
+		} catch(FileNotFoundException e) {
+			System.out.println("There aint no darn file in these parts.");
+		}
+		if (ng != null) {
+			BestPath bp = ng.getBestPath("IHN", "GCF", FlightCriteria.CANCELED);
+			assertTrue(Math.abs(bp.getPathCost() - .5) < 0.000001);
 			System.out.println(bp.getPathCost());
 			System.out.println(bp.getPath());
 		}
@@ -94,9 +108,7 @@ public class NetworkGraphTests {
 		}
 		if (ng != null) {
 			BestPath bp = ng.getBestPath("IHN", "GCF", FlightCriteria.DELAY, "MQ");
-			if(bp.getPathCost() != 351.5) {
-				System.out.println("Incorrect Flight Cost Resolution");
-			}
+			assertTrue(Math.abs(bp.getPathCost() - 351.5) < 0.000001);
 			System.out.println(bp.getPathCost());
 			System.out.println(bp.getPath());
 		}
