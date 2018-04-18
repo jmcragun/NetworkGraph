@@ -37,7 +37,7 @@ public class GenerateFlightData {
 	// ONLY EDIT THESE THREE VARIABLES
 	private static int edgeCount = 15;
 	private static int nodeCount = 5;
-	private static String filePath = "testfile.csv";
+	private static String filePath = "Paths2.csv";
 
 	// EDITING ANYTHING BELOW THIS MAY SCREW UP THE CODE SO DO SO AT YOUR OWN RISK.
 	private static final int BASE_COST = 200;
