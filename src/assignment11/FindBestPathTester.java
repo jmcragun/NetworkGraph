@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 
 /**
  * <p>An example of how a user will use your best flight API.</p>
- * <p>You will still be required to writed JUnit tests to test your program.</p>
+ * <p>You will still be required to write JUnit tests to test your program.</p>
  *
  * @author CS2420 Teaching Staff - Spring 2018
  *
