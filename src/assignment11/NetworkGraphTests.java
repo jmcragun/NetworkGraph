@@ -125,7 +125,5 @@ public class NetworkGraphTests {
 		} catch (FileNotFoundException e) {
 			System.out.println("The File was not found.");
 		}
-		// TODO: THERE YOU GO YOU GOOFY MF STEVE
-		assertEquals(5, 5);
 	}//Write more tests using generate flight data
 }
