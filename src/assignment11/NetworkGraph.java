@@ -149,7 +149,7 @@ public class NetworkGraph {
 				if (network.containsKey(flight.destinationCity())) {
 					Airport dest = network.get(flight.destinationCity());
 					if (!dest.isVisited()) {
-						if (dest.cost() > currentPort.cost() + flight.getValue(criteria)) {
+						if ((dest.cost() > currentPort.cost() + flight.getValue(criteria)) && (flight.getValue(criteria) >= 0)) {
 							dest.cameFrom(currentPort);
 							dest.setCost(currentPort.cost() + currentPort.getLocalCost(criteria, dest.city()));
 							priorityQueue.add(dest);
@@ -221,7 +221,7 @@ public class NetworkGraph {
 				if (network.containsKey(flight.destinationCity())) {
 					Airport dest = network.get(flight.destinationCity());
 					if (!dest.isVisited()) {
-						if (dest.cost() > currentPort.cost() + flight.getValue(criteria, airliner)) {
+						if ((dest.cost() > currentPort.cost() + flight.getValue(criteria, airliner)) && (flight.getValue(criteria, airliner) >= 0)) {
 							dest.cameFrom(currentPort);
 							dest.setCost(currentPort.cost() + currentPort.getLocalCost(criteria, dest.city(), airliner));
 							priorityQueue.add(dest);
